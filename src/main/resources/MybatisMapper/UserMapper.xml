@@ -39,44 +39,6 @@
 	<select id="findByUserCodeCount" resultType="int">
 		select count(1) from smbms_user where userCode = #{userCode}
 	</select>
-	<select id="findByUserCode" resultMap="findByUserAllMap">
-		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
-		CASE gender
-			WHEN '1' THEN '男'
-			WHEN '2' THEN '女'
-		ELSE 0
-		END AS userGender
-		from smbms_user as u
-		INNER JOIN smbms_role as r on userRole = r.id
-		where userCode = #{userCode}
-		limit #{pageBean.startIndex},#{pageBean.pageSize}
-	</select>
-	<select id="findByUserRoleCount" resultType="int">
-		select count(1) from smbms_user where userRole = #{userRoleId}
-	</select>
-	<select id="findByUserRole" resultMap="findByUserAllMap">
-		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
-		CASE gender
-			WHEN '1' THEN '男'
-			WHEN '2' THEN '女'
-		ELSE 0
-		END AS userGender
-		from smbms_user as u
-		INNER JOIN smbms_role as r on userRole = r.id
-		where userRole = #{queryUserRole}
-		limit #{pageBean.startIndex},#{pageBean.pageSize}
-	</select>
-	<select id="findByUserAll"  resultMap="findByUserAllMap">
-		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
-		CASE gender
-			WHEN '1' THEN '男'
-			WHEN '2' THEN '女'
-		ELSE 0
-		END AS userGender
-		from smbms_user as u
-		INNER JOIN smbms_role as r on userRole = r.id
-		limit #{pageBean.startIndex},#{pageBean.pageSize}
-	</select>
 	<select id="getUser" resultMap="findByUserAllMap">
 		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
 		CASE gender
@@ -94,6 +56,16 @@
 		  	and userRole = #{userRoleId}
 		</if>
 		limit #{pageBean.startIndex},#{pageBean.pageSize}
+	</select>
+	<select id="getUserCount" resultType="int">
+		select count(1) from smbms_user
+		where 1 = 1
+		<if test="key != ''">
+			and userCode = #{key}
+		</if>
+		<if test="userRoleId != 0">
+			and userRole = #{userRoleId}
+		</if>
 	</select>
 	<resultMap id="findByUserAllMap" type="entity.User">
 		<id property="id" column="id"/>

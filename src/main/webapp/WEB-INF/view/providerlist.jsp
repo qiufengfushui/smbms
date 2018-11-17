@@ -15,10 +15,10 @@
         	<form method="get" action="${pageContext.request.contextPath }/provider/management.do">
 				<input type="hidden" name="pageIndex" value="1"/>
 				<span>供应商编码：</span>
-				<input name="queryProCode" type="text" value="">
+				<input name="queryProCode" type="text" value="${proCode}">
 				
 				<span>供应商名称：</span>
-				<input name="queryProName" type="text" value="">
+				<input name="queryProName" type="text" value="${proName}">
 
 				<input value="查 询" type="submit" id="searchbutton">
 				<a href="${pageContext.request.contextPath}/provider/provideradd.do">添加供应商</a>

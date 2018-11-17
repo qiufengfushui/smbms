@@ -68,26 +68,16 @@ public class UserController {
     //展示用户视图
     @RequestMapping("/management.do")
     public String management(HttpSession session, @RequestParam(value = "pageIndex",required = false)String pageIndex, @RequestParam(value = "queryname",required = false)String queryname, @RequestParam(value = "queryUserRole",required = false) String queryUserRole){
-        PageBean pageBean = null;
-        int totalRecord = 0;
+        PageBean pageBean;
         //表示一页展示9条数据
         int pageSize = 9;
         int pageNum = pageIndex==null?1:Integer.valueOf(pageIndex);
         String key = queryname == null ? "" : queryname;
+
         int userRoleId = queryUserRole==null?0:Integer.valueOf(queryUserRole);
 
-        if(key != "" && userRoleId == 0){
-            //根据userCode查询用户
-            totalRecord = userService.findByUserCodeCount(key);
-        }else if(key == "" && 0 != userRoleId){
-            //根据用户角色查询用户
-            totalRecord = userService.findByUserRoleCount(userRoleId);
-        }else if(key != "" && 0 != userRoleId){
-            totalRecord = userService.findByUserRoleAndUserCodeCount(userRoleId,key);
-        } else{
-            //查询所有用户
-            totalRecord = userService.findByUserAllCount();
-        }
+        int totalRecord = userService.getUserCount(key,userRoleId);
+
         pageBean = new PageBean(pageNum,pageSize,totalRecord);
         pageBean =  userService.getPageBeanUser(pageBean,key,userRoleId);
         session.setAttribute("userList",pageBean.getList());

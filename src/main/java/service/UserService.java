@@ -18,8 +18,6 @@ public interface UserService {
 	 */
 	User getUserById(int id);
 
-	int checkUserCode(String userCode);
-
 	int addUser(User user);
 
 	/**
@@ -31,27 +29,18 @@ public interface UserService {
 	 */
 	int pwdModify(long id, String oldpassword, String newpassword);
 
-	PageBean<User> findByUserAll(PageBean<User> pageBean);
-
-    int findByUserAllCount();
-
     int findByUserCodeCount(String queryname);
 
-	PageBean<User> findByUserCode(PageBean<User> pageBean, String queryname);
-
-	int findByUserRoleCount(int queryUserRole);
-
-	PageBean<User> findByUserRole(PageBean<User> pageBean, int queryUserRole);
 
 	PageBean<User> getPageBeanUser(PageBean<User> pageBean, String queryname, int userRoleId);
 
 	User getUserSingle(long id);
-
-	int findByUserRoleAndUserCodeCount(int userRoleId, String queryname);
 
 	int updUser(User user);
 
     String delUser(int id);
 
 	String checkPwd(long id, String oldpassword);
+
+    int getUserCount(String key, int userRoleId);
 }

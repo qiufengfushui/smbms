@@ -30,4 +30,5 @@ public interface ProviderDao  {
 
     int updateProviderInfo(@Param("provider") Provider provider, @Param("modifyBy") long modifyBy);
 
+    int getProviderCount(@Param("proName") String proName, @Param("proCode") String proCode);
 }

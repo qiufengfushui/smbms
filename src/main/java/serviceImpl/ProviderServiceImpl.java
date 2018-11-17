@@ -90,4 +90,9 @@ public class ProviderServiceImpl implements ProviderService {
         return providerDao.updateProviderInfo(provider,modifyBy);
     }
 
+    @Override
+    public int getProviderCount(String proName, String proCode) {
+        return providerDao.getProviderCount(proName,proCode);
+    }
+
 }

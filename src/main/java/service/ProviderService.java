@@ -25,4 +25,6 @@ public interface ProviderService {
     String delProvider(long id);
 
     int updateProviderInfo(Provider provider, long modifyBy);
+
+    int getProviderCount(String proName, String proCode);
 }

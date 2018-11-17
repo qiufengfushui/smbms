@@ -42,27 +42,14 @@ public class ProviderController {
     @RequestMapping(value = "/management.do")
     public String management(HttpServletRequest request,HttpSession session, @RequestParam(value = "pageIndex",required = false)String pageIndex, @RequestParam(value = "queryProCode",required = false) String proCode, @RequestParam(value = "queryProName",required = false) String proName) throws UnsupportedEncodingException {
         PageBean pageBean;
-        int totalRecord = 0;
         //表示一页展示9条数据
         int pageSize = 9;
         int pageNum = pageIndex==null?1:Integer.valueOf(pageIndex);
         proName = proName==null?"":new String(proName.getBytes("ISO-8859-1"),"utf-8");
         proCode = proCode==null?"":proCode;
-        System.out.println(proName);
 
-        if(proName != "" && proCode == ""){
-            //按照供应商名称查询
-            totalRecord =  service.findByProNameCount(proName);
-        }else if(proName == "" && proCode != ""){
-            //按照供应商编码查询
-            totalRecord =  service.findByProCodeCount(proCode);
-        }else if(proName != "" && proCode != ""){
-            //按照供应商名称和供应商编码查询
-            totalRecord =  service.findByProCodeAndProNameCount(proCode,proName);
-        }else{
-            //查询所有
-            totalRecord = service.getAllProviderCount();
-        }
+        int totalRecord = service.getProviderCount(proName,proCode);
+
         pageBean = new PageBean(pageNum,pageSize,totalRecord);
         pageBean = service.findByProvider(pageBean,proName,proCode);
         session.setAttribute("pageBean",pageBean);

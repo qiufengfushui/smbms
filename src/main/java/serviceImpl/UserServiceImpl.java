@@ -43,40 +43,12 @@ public class UserServiceImpl implements UserService {
 		if (result < 1){
 			return -1;
 		}
-		return userDao.updatePwd(id,newPwd);
-	}
-
-	@Override
-	public PageBean<User> findByUserAll(PageBean<User> pageBean) {
-		pageBean.setList(userDao.findByUserAll(pageBean));
-		return pageBean;
-	}
-
-	@Override
-	public int findByUserAllCount() {
-		return userDao.findByUserAllCount();
+		return userDao.updPwd(id,newPwd);
 	}
 
 	@Override
 	public int findByUserCodeCount(String queryname) {
 		return userDao.findByUserCodeCount(queryname);
-	}
-
-	@Override
-	public PageBean<User> findByUserCode(PageBean<User> pageBean, String queryname) {
-		pageBean.setList(userDao.findByUserCode(pageBean,queryname));
-		return pageBean;
-	}
-
-	@Override
-	public int findByUserRoleCount(int queryUserRole) {
-		return userDao.findByUserRoleCount(queryUserRole);
-	}
-
-	@Override
-	public PageBean<User> findByUserRole(PageBean<User> pageBean, int queryUserRole) {
-		pageBean.setList(userDao.findByUserRole(pageBean,queryUserRole));
-		return pageBean;
 	}
 
 	@Override
@@ -88,11 +60,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserSingle(long id) {
 		return userDao.getUserSingle(id);
-	}
-
-	@Override
-	public int findByUserRoleAndUserCodeCount(int userRoleId, String queryname) {
-		return userDao.findByUserRoleAndUserCodeCount(userRoleId,queryname);
 	}
 
 	@Override
@@ -122,15 +89,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int checkUserCode(String userCode) {
-		// TODO Auto-generated method stub
-		return userDao.findByUserCodeCount(userCode);
+	public int getUserCount(String key, int userRoleId) {
+		return userDao.getUserCount(key,userRoleId);
 	}
 
 	@Override
 	public int addUser(User user) {
 		return userDao.addUser(user);
 	}
-
-
 }

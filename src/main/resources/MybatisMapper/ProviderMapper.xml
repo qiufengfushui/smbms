@@ -33,6 +33,15 @@
 		</if>
 		limit #{pageBean.startIndex},#{pageBean.pageSize}
 	</select>
+	<select id="getProviderCount" resultType="int">
+		select count(1) from smbms_provider where 1 = 1
+		<if test="proName != ''">
+			and proName = #{proName}
+		</if>
+		<if test="proCode != ''">
+			and proCode = #{proCode}
+		</if>
+	</select>
 	<select id="getProvider" resultType="entity.Provider">
 		select * from smbms_provider where id = #{id}
 	</select>

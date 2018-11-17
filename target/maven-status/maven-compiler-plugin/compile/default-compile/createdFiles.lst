@@ -12,7 +12,6 @@ controller\RoleController.class
 serviceImpl\ProviderServiceImpl.class
 dao\BillDao.class
 serviceImpl\BillServiceImpl.class
-dao\AddressDao.class
 controller\ValidateCodeController.class
 entity\Address.class
 util\PageBean.class
