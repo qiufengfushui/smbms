@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ProviderDao">
+	<select id="findByIdAndName" resultType="entity.Provider">
+		select id,proName from smbms_provider
+	</select>
+	<select id="getAllProvider" resultType="entity.Provider">
+		select * from smbms_provider
+	</select>
+	<insert id="addProvider">
+		insert into smbms_provider(proCode,proName,proDesc,proContact,proPhone,proAddress,proFax,createdBy,creationDate,`modifyBy`,`modifyDate`)
+		VALUES (#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax},#{createdBy},now(),null,null)
+	</insert>
+	<select id="findByProNameCount" resultType="int">
+		select count(1) from smbms_provider where proName = #{proName}
+	</select>
+	<select id="findByProCodeCount" resultType="int">
+		select count(1) from smbms_provider where proCode = #{proCode}
+	</select>
+	<select id="findByProCodeAndProNameCount" resultType="int">
+		select count(1) from smbms_provider where proCode = #{proCode} and proName = #{proName}
+	</select>
+	<select id="getAllProviderCount" resultType="int">
+		select count(1) from smbms_provider
+	</select>
+	<select id="findByProvider" resultType="entity.Provider">
+		select * from smbms_provider where 1 = 1
+		<if test="proName != ''">
+			and proName = #{proName}
+		</if>
+		<if test="proCode != ''">
+			and proCode = #{proCode}
+		</if>
+		limit #{pageBean.startIndex},#{pageBean.pageSize}
+	</select>
+	<select id="getProvider" resultType="entity.Provider">
+		select * from smbms_provider where id = #{id}
+	</select>
+	<select id="findByProIdCount" resultType="int">
+		select count(1) from smbms_provider where id = #{id}
+	</select>
+	<delete id="delProvider">
+		delete from smbms_provider where id = #{id}
+	</delete>
+	<update id="updateProviderInfo">
+		update smbms_provider
+		set proName = #{provider.proName},proCode = #{provider.proCode},proContact = #{provider.proContact},proPhone = #{provider.proPhone},
+		proAddress = #{provider.proAddress},proFax = #{provider.proFax},proDesc = #{provider.proDesc},
+		modifyBy = #{modifyBy},modifyDate = now()
+		where id = #{provider.id}
+	</update>
+</mapper>

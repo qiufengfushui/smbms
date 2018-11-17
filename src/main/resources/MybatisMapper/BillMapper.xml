@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BillDao">
+
+	<select id="getAllBill" resultMap="getBillMap">
+		select b.id as bId,b.*,p.id as pId,p.* from smbms_bill as b
+		inner join smbms_provider as p on p.id = b.providerId
+	</select>
+	<select id="findByBillCount" resultType="int">
+		select count(1) from smbms_bill where providerId = #{id}
+	</select>
+	<select id="findByProNameCount" resultType="int">
+		select count(1) from smbms_bill where productName = #{key}
+	</select>
+	<select id="findByproIdCount" resultType="int">
+		select count(1) from smbms_bill where providerId = #{proId}
+	</select>
+	<select id="getBillCount" resultType="int">
+		select count(1) from smbms_bill where 1 = 1
+		<if test="key != ''">
+			and productName = #{key}
+		</if>
+		<if test="proId > 0">
+			and providerId = #{proId}
+		</if>
+		<if test="isPayment == '未付款'">
+			and isPayment = 1
+		</if>
+		<if test="isPayment == '已付款'">
+			and isPayment = 2
+		</if>
+	</select>
+	<select id="getBill" resultMap="getBillMap">
+		select b.id as bId,b.*,p.id as pId,p.* from smbms_bill as b
+		inner join smbms_provider as p on p.id = b.providerId
+		where 1 = 1
+		<if test="key != ''">
+			and productName = #{key}
+		</if>
+		<if test="proId > 0">
+			and providerId = #{proId}
+		</if>
+		<if test="isPayment == '未付款'">
+			and isPayment = 1
+		</if>
+		<if test="isPayment == '已付款'">
+			and isPayment = 2
+		</if>
+		limit #{pageBean.startIndex},#{pageBean.pageSize}
+	</select>
+	<select id="getBillSingle" resultMap="getBillMap">
+		select b.id as bId,b.*,p.id as pId,p.* from smbms_bill as b
+		inner join smbms_provider as p on p.id = b.providerId
+		where b.id = #{id}
+	</select>
+
+	<resultMap id="getBillMap" type="entity.Bill">
+		<id property="id" column="bId"/>
+		<result property="billCode" column="billCode"/>
+		<result property="productName" column="productName"/>
+		<result property="productDesc" column="productDesc"/>
+		<result property="productUnit" column="productUnit"/>
+		<result property="productCount" column="productCount"/>
+		<result property="totalPrice" column="totalPrice"/>
+		<result property="isPayment" column="isPayment"/>
+		<result property="createdBy" column="createdBy"/>
+		<result property="creationDate" column="creationDate"/>
+		<result property="modifyBy" column="modifyBy"/>
+		<result property="modifyDate" column="modifyDate"/>
+		<collection property="provider" ofType="entity.Provider">
+			<id property="id" column="pId"/>
+			<result property="proCode" column="proCode"/>
+			<result property="proName" column="proName"/>
+			<result property="proDesc" column="proDesc"/>
+			<result property="proContact" column="proContact"/>
+			<result property="proPhone" column="proPhone"/>
+			<result property="proAddress" column="proAddress"/>
+			<result property="proFax" column="proFax"/>
+			<result property="createdBy" column="createdBy"/>
+			<result property="creationDate" column="creationDate"/>
+			<result property="modifyBy" column="modifyBy"/>
+			<result property="modifyDate" column="modifyDate"/>
+		</collection>
+	</resultMap>
+	<insert id="addBill">
+		insert into smbms_bill(`billCode`,`productName`,`productDesc`,`productUnit`,`productCount`,`totalPrice`,`isPayment`,`createdBy`,`creationDate`,providerId)
+		value(#{bill.billCode},#{bill.productName},#{bill.productDesc},#{bill.productUnit},#{bill.productCount},#{bill.totalPrice},#{bill.isPayment},#{bill.createdBy},now(),#{bill.providerId})
+	</insert>
+	<update id="updBill">
+		update smbms_bill set productName = #{bill.productName},productUnit = #{bill.productUnit},productCount = #{bill.productCount},
+		totalPrice = #{bill.totalPrice},providerId = #{bill.providerId},isPayment = #{bill.isPayment},modifyBy = #{bill.modifyBy},modifyDate = now() where id = #{bill.id}
+	</update>
+	<delete id="delBill">
+		delete from smbms_bill where id = #{id}
+	</delete>
+</mapper>

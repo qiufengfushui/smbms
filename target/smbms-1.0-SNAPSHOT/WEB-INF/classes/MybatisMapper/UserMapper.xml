@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.UserDao">
+	<select id="getUserSingle" resultMap="UserSingleMap">
+		select u.*,r.*,
+		CASE gender
+			WHEN '1' THEN '男'
+			WHEN '2' THEN '女'
+		ELSE 0
+		END AS userGender
+		from smbms_user as u
+		INNER JOIN smbms_role as r on userRole = r.id
+		where u.id = #{id}
+	</select>
+	<resultMap id="UserSingleMap" type="entity.User">
+		<id property="id" column="id"/>
+		<result property="userCode" column="userCode"/>
+		<result property="userName" column="userName"/>
+		<result property="userPassword" column="userPassword"/>
+		<result property="gender" column="gender"/>
+		<result property="birthday" column="birthday"/>
+		<result property="phone" column="phone"/>
+		<result property="address" column="address"/>
+		<result property="userRole" column="userRole"/>
+		<result property="createdBy" column="createdBy"/>
+		<result property="creationDate" column="creationDate"/>
+		<result property="modifyBy" column="modifyBy"/>
+		<result property="modifyDate" column="modifyDate"/>
+		<association property="role" javaType="entity.Role">
+			<id property="id" column="id"/>
+			<result property="roleCode" column="roleCode"/>
+			<result property="roleName" column="roleName"/>
+			<result property="createdBy" column="createdBy"/>
+			<result property="creationDate" column="creationDate"/>
+			<result property="modifyBy" column="modifyBy"/>
+			<result property="modifyDate" column="modifyDate"/>
+		</association>
+	</resultMap>
+	<select id="findByUserCodeCount" resultType="int">
+		select count(1) from smbms_user where userCode = #{userCode}
+	</select>
+	<select id="findByUserCode" resultMap="findByUserAllMap">
+		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
+		CASE gender
+			WHEN '1' THEN '男'
+			WHEN '2' THEN '女'
+		ELSE 0
+		END AS userGender
+		from smbms_user as u
+		INNER JOIN smbms_role as r on userRole = r.id
+		where userCode = #{userCode}
+		limit #{pageBean.startIndex},#{pageBean.pageSize}
+	</select>
+	<select id="findByUserRoleCount" resultType="int">
+		select count(1) from smbms_user where userRole = #{userRoleId}
+	</select>
+	<select id="findByUserRole" resultMap="findByUserAllMap">
+		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
+		CASE gender
+			WHEN '1' THEN '男'
+			WHEN '2' THEN '女'
+		ELSE 0
+		END AS userGender
+		from smbms_user as u
+		INNER JOIN smbms_role as r on userRole = r.id
+		where userRole = #{queryUserRole}
+		limit #{pageBean.startIndex},#{pageBean.pageSize}
+	</select>
+	<select id="findByUserAll"  resultMap="findByUserAllMap">
+		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
+		CASE gender
+			WHEN '1' THEN '男'
+			WHEN '2' THEN '女'
+		ELSE 0
+		END AS userGender
+		from smbms_user as u
+		INNER JOIN smbms_role as r on userRole = r.id
+		limit #{pageBean.startIndex},#{pageBean.pageSize}
+	</select>
+	<select id="getUser" resultMap="findByUserAllMap">
+		select u.*,roleName,floor(DATEDIFF(now(),birthday)/365) as age,
+		CASE gender
+			WHEN '1' THEN '男'
+			WHEN '2' THEN '女'
+		ELSE 0
+		END AS userGender
+		from smbms_user as u
+		INNER JOIN smbms_role as r on userRole = r.id
+		where 1 = 1
+		<if test="userCode != ''">
+			and userCode = #{userCode}
+		</if>
+		<if test="userRoleId != 0">
+		  	and userRole = #{userRoleId}
+		</if>
+		limit #{pageBean.startIndex},#{pageBean.pageSize}
+	</select>
+	<resultMap id="findByUserAllMap" type="entity.User">
+		<id property="id" column="id"/>
+		<result property="userCode" column="userCode"/>
+		<result property="userName" column="userName"/>
+		<result property="userPassword" column="userPassword"/>
+		<result property="gender" column="gender"/>
+		<result property="birthday" column="birthday"/>
+		<result property="phone" column="phone"/>
+		<result property="address" column="address"/>
+		<result property="userRole" column="userRole"/>
+		<result property="createdBy" column="createdBy"/>
+		<result property="creationDate" column="creationDate"/>
+		<result property="modifyBy" column="modifyBy"/>
+		<result property="modifyDate" column="modifyDate"/>
+		<association property="role" javaType="entity.Role">
+			<id property="id" column="id"/>
+			<result property="roleCode" column="roleCode"/>
+			<result property="roleName" column="roleName"/>
+			<result property="createdBy" column="createdBy"/>
+			<result property="creationDate" column="creationDate"/>
+			<result property="modifyBy" column="modifyBy"/>
+			<result property="modifyDate" column="modifyDate"/>
+		</association>
+	</resultMap>
+	<select id="checkPwd" resultType="int">
+		select count(1) from smbms_user where id = #{id} and userPassword = #{userPassword}
+	</select>
+	<select id="findByUserIdCount" resultType="int">
+		select count(1) from smbms_user where id = #{id}
+	</select>
+	<select id="findByUserAllCount" resultType="int">
+		select count(1) from smbms_user
+	</select>
+	<select id="findByUserRoleAndUserCodeCount" resultType="int">
+		select count(1) from smbms_user where id = #{id} and userCode = #{userCode}
+	</select>
+	<select id="getIdByuCodeAnduPwd" resultType="Integer">
+		select id from smbms_user where userCode=#{userCode} and userPassword = #{userPassword}
+	</select>
+	<select id="getUserById"  resultType="entity.User">
+		select * from smbms_user where id = #{id}
+	</select>
+	<select id="findByUserPwd" resultType="int">
+		select count(1) from smbms_user where id = #{id} and userPassword = #{oldPwd}
+	</select>
+	<insert id="addUser">
+		INSERT INTO smbms_user(`userCode`,`userName`,`userPassword`,`gender`,`birthday`,`phone`,`address`,`userRole`,`createdBy`,`creationDate`,`modifyBy`,`modifyDate`)
+		VALUES (#{userCode},#{userName},#{userPassword},#{gender},#{birthday},#{phone},#{address},#{userRole},#{createdBy},now(),null,null )
+	</insert>
+	<update id="updatePwd" >
+		update smbms_user set userPassword = #{newPwd} where id = #{id}
+	</update>
+	<update id="updateUserInfo">
+		update smbms_user
+		set userName = #{user.userName},gender = #{user.gender},birthday = #{user.birthday},
+		phone = #{user.phone},address = #{user.address},userRole = #{user.userRole},
+		modifyBy = #{modifyBy},modifyDate = now()
+		where id = #{user.id}
+	</update>
+	<delete id="delUser" >
+		delete from smbms_user where id = #{id}
+	</delete>
+</mapper>

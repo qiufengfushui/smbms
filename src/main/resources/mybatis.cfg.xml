@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!--设置运行时的行为-->
+	<settings>
+		<setting name="logImpl" value="LOG4J"/>
+		<!--设置为FULL，自动匹配所有，则在resultMap中不进行匹配的字段也可以映射-->
+		<setting name="autoMappingBehavior" value="FULL"/>
+	</settings>
+
+	<!--指向包含实体类的包-->
+	<typeAliases>
+		<package name="entity"/>
+	</typeAliases>
+</configuration>
